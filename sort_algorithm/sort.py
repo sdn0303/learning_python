@@ -1,6 +1,23 @@
 # -*- Coding: UTF-8 -*-
+import time
+import random
 
 
+def time_measure(func):
+    def __decorator(*args, **kwargs):
+        start = time.time()
+        print('Measure execution time.')
+        print('func: {}'.format(func.__name__))
+        f = func(*args, **kwargs)
+        end = time.time() - start
+        m, s = divmod(end, 60)
+        print('Elapsed time:{0} [sec], {1} [min]'.format(s, m))
+        return f
+
+    return __decorator
+
+
+@time_measure
 def bubble_sort(numbers):
     for idx in reversed(range(len(numbers))):
         for i in range(idx):
@@ -9,6 +26,7 @@ def bubble_sort(numbers):
     return numbers
 
 
+@time_measure
 def selection_sort(numbers):
     for idx in range(len(numbers)):
         mini = idx
@@ -21,6 +39,7 @@ def selection_sort(numbers):
     return numbers
 
 
+@time_measure
 def insert_sort(numbers):
     for idx in range(len(numbers)):
         for i in reversed(range(idx)):
@@ -32,23 +51,15 @@ def insert_sort(numbers):
     return numbers
 
 
-def heap_sort(numbers):
-    heap = set(numbers)
-    
-
-
-
-if __name__ == "__main__":
-    numbers_list = [9, 2, 1, 5, 7, 3, 8, 4, 6, 0]
-
-    result = bubble_sort(numbers_list)
-    print(f"Bubble Sort: {result}")
-    print("------------------------")
-
-    result = selection_sort(numbers_list)
-    print(f"Selection Sort: {result}")
-    print("------------------------")
-
-    result = insert_sort(numbers_list)
-    print(f"Insert Sort: {result}")
-    print("------------------------")
+@time_measure
+def bucket_sort(max_num):
+    numbers = [random.randint(1, 10) for _ in range(15)]
+    list_counter = [0] * (max_num + 1)
+    for i in numbers:
+        list_counter[i] += 1
+    cnt = 0
+    for n in range(len(list_counter)):
+        for i in range(list_counter[n]):
+            numbers[i] = n
+            cnt += 1
+    return numbers
